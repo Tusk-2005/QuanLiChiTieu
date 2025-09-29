@@ -1,0 +1,50 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<h2 class="mb-4">💡 Đặt ngân sách</h2>
+<form method="post" class="mb-4">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">💾 Lưu</button>
+  <a href="{% url 'dashboard' %}" class="btn btn-secondary">↩ Quay lại</a>
+</form>
+
+<h3 class="mt-5">📊 Hạn mức hiện tại</h3>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Danh mục</th>
+      <th>Ngân sách</th>
+      <th>Đã chi</th>
+      <th>Còn lại</th>
+      <th>Hành động</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for b in budgets %}
+    <tr>
+      <td>{{ b.category }}</td>
+      <td>{{ b.amount }} ₫</td>
+      <td>{{ b.spent }} ₫</td>
+      <td>
+        {% if b.remaining < 0 %}
+          <span class="text-danger">{{ b.remaining }} ₫</span>
+        {% else %}
+          <span class="text-success">{{ b.remaining }} ₫</span>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{% url 'budget_edit' b.id %}" class="btn btn-warning btn-sm">✏ Sửa</a>
+        <form method="post" action="{% url 'budget_delete' b.id %}" style="display:inline">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger btn-sm">🗑 Xóa</button>
+        </form>
+      </td>
+    </tr>
+    {% empty %}
+    <tr>
+      <td colspan="5" class="text-center">Chưa có ngân sách nào</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

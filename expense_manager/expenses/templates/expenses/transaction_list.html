@@ -1,0 +1,44 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<h2 class="mb-4">📒 Danh sách giao dịch</h2>
+
+<div class="row">
+  {% for t in transactions %}
+  <div class="col-md-4 mb-3">
+    <div class="card p-3 {% if t.type == 'income' %}border-success{% else %}border-danger{% endif %}">
+      
+      <!-- Header -->
+      <div class="d-flex justify-content-between align-items-center">
+        <h5 class="{% if t.type == 'income' %}text-success{% else %}text-danger{% endif %}">
+          {{ t.get_type_display }}
+        </h5>
+        <span class="fw-bold">{{ t.amount }} ₫</span>
+      </div>
+
+      <!-- Body -->
+      <p class="mb-1"><b>Danh mục:</b> {{ t.category|default:"Không có" }}</p>
+      <p class="mb-1"><b>Ngày:</b> {{ t.date }}</p>
+      <p class="text-muted">{{ t.note }}</p>
+
+      <!-- Footer (Edit + Delete) -->
+      <div class="d-flex justify-content-end gap-2 mt-2">
+        <a href="{% url 'transaction_edit' t.id %}" class="btn btn-sm btn-outline-primary">
+          ✏️ Sửa
+        </a>
+        <form method="post" action="{% url 'transaction_delete' t.id %}" 
+              onsubmit="return confirm('Bạn có chắc chắn muốn xoá giao dịch này?');">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Xoá</button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+  {% empty %}
+  <p class="text-muted">Chưa có giao dịch nào.</p>
+  {% endfor %}
+</div>
+
+<!-- Add new -->
+<a href="{% url 'transaction_create' %}" class="btn btn-primary mt-3">➕ Thêm giao dịch</a>
+{% endblock %}

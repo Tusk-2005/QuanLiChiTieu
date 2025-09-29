@@ -1,0 +1,54 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<h2>📊 Thống kê chi tiêu</h2>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Biểu đồ tròn</h5>
+      <canvas id="pieChart"></canvas>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card p-3">
+      <h5>Biểu đồ cột</h5>
+      <canvas id="barChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  // Truyền dữ liệu từ Django sang JS (chuyển thành JSON hợp lệ)
+  const chartLabels = JSON.parse('{{ labels|safe|escapejs }}');
+  const chartData = JSON.parse('{{ data|safe|escapejs }}');
+
+  // Biểu đồ tròn
+  new Chart(document.getElementById("pieChart"), {
+    type: "pie",
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        data: chartData,
+        backgroundColor: ["#f44336", "#2196f3", "#4caf50", "#ff9800", "#9c27b0"]
+      }]
+    }
+  });
+
+  // Biểu đồ cột
+  new Chart(document.getElementById("barChart"), {
+    type: "bar",
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: "Chi tiêu",
+        data: chartData,
+        backgroundColor: "#2196f3"
+      }]
+    },
+    options: {
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+</script>
+{% endblock %}

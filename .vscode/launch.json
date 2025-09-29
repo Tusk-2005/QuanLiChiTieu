@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Django Runserver",
+            "type": "python",
+            "request": "launch",
+            "program": "C:/VScode/QuanLiChiTieu/expense_manager/manage.py",
+            "args": [
+                "runserver",
+                "127.0.0.1:8000"
+            ],
+            "django": true,
+            "justMyCode": true
+        }
+    ]
+}

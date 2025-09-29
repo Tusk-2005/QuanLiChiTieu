@@ -1,0 +1,4 @@
+http://127.0.0.1:8000/accounts/login/
+python manage.py runserver
+venv\Scripts\activate
+pip install -r requirements.txt

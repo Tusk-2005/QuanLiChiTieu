@@ -1,0 +1,16 @@
+{% extends "expenses/base.html" %}
+{% block content %}
+<div class="card p-4">
+  <h2 class="mb-3">➕ Thêm giao dịch</h2>
+  <form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="btn btn-success">💾 Lưu</button>
+  <a href="{% url 'transaction_list' %}" class="btn btn-secondary">↩ Quay lại</a>
+</form>
+</div>
+{% endblock %}
+
+<a href="{% url 'export_csv' %}" class="btn btn-sm btn-outline-primary">Xuất CSV</a>
+<a href="{% url 'export_excel' %}" class="btn btn-sm btn-outline-success">Xuất Excel</a>
+<a href="{% url 'export_pdf' %}" class="btn btn-sm btn-outline-danger">Xuất PDF</a>
