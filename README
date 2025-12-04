@@ -1,4 +1,5 @@
-http://127.0.0.1:8000/accounts/login/
-python manage.py runserver
+http://127.0.0.1:8000/accounts/login/ #Link to go to
 venv\Scripts\activate
-pip install -r requirements.txt
+python manage.py runserver  
+pip install -r requirements.txt 
+If install full , we can just run in VS code with F5
