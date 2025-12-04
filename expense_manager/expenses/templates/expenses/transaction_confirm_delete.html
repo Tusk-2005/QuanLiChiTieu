@@ -1,17 +1,51 @@
 {% extends "expenses/base.html" %}
 {% block content %}
+<style>
+  .btn-dark,
+  .btn-outline-dark {
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.55rem 1.3rem;
+    transition:
+      background-color 0.18s ease-out,
+      color 0.18s ease-out,
+      border-color 0.18s ease-out,
+      transform 0.18s ease-out,
+      box-shadow 0.18s ease-out;
+  }
+  .btn-outline-dark {
+    background-color: transparent;
+    border-color: #4b5563;
+    color: #111827;
+  }
+  .btn-outline-dark:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  }
+</style>
+
 <div class="card p-4">
-  <h3>🗑 Xác nhận xoá giao dịch</h3>
+  <h3 class="mb-3">🗑 Xác nhận xoá giao dịch</h3>
   <p><b>Loại:</b> {{ object.get_type_display }}</p>
   <p><b>Số tiền:</b> {{ object.amount }} ₫</p>
   <p><b>Danh mục:</b> {{ object.category|default:"Không có" }}</p>
   <p><b>Ngày:</b> {{ object.date }}</p>
   <p><b>Ghi chú:</b> {{ object.note }}</p>
 
-  <form method="post" class="mt-3">
+  <form method="post" class="mt-3 d-flex gap-2">
     {% csrf_token %}
-    <button type="submit" class="btn btn-danger">🗑 Xoá</button>
-    <a href="{% url 'transaction_list' %}" class="btn btn-secondary">↩ Huỷ</a>
+    <button type="submit" class="btn btn-danger">
+      🗑 Xoá
+    </button>
+    <a href="{% url 'transaction_list' %}" class="btn btn-outline-dark">
+      ↩ Huỷ
+    </a>
   </form>
 </div>
 {% endblock %}

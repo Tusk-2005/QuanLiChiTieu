@@ -1,27 +1,189 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Đăng nhập | Expense Manager</title>
+  <title>Expense Manager | Xác thực</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
+    :root {
+      --exp-black: #000000;
+      --exp-black-soft: #111111;
+      --exp-border: #333333;
+      --exp-input-bg: #181818;
+      --exp-text: #f8f9fa;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #f4f6f9;
+      margin: 0;
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100vh;
+      background:
+        radial-gradient(circle at top left, #2b2b2b 0, #000000 45%, #000000 100%);
+      color: var(--exp-text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
-    .card {
-      border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+
+    .auth-container {
+      width: 100%;
+      max-width: 440px;
+      padding: 1.5rem;
+    }
+
+    .auth-brand {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .auth-brand-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .auth-brand-subtitle {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: #9ca3af;
+    }
+
+    .auth-card {
+      background-color: var(--exp-black-soft);
+      border-radius: 20px;
+      border: 1px solid var(--exp-border);
+      padding: 2.2rem 2rem;
+      box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.95),
+        0 0 0 1px rgba(255, 255, 255, 0.02);
+    }
+
+    .auth-card h2,
+    .auth-card h3 {
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .form-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #9ca3af;
+      margin-bottom: 0.35rem;
+    }
+
+    .form-control {
+      background-color: var(--exp-input-bg);
+      border-color: var(--exp-border);
+      color: var(--exp-text);
+      border-radius: 999px;
+      padding: 0.6rem 1rem;
+      font-size: 0.95rem;
+    }
+
+    .form-control:focus {
+      background-color: var(--exp-input-bg);
+      border-color: #ffffff;
+      color: #ffffff;
+      box-shadow: 0 0 0 1px #ffffff, 0 0 0 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .form-control::placeholder {
+      color: #6b7280;
+      font-size: 0.9rem;
+    }
+
+    .btn-dark,
+    .btn-outline-dark {
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.65rem 1.4rem;
+      transition:
+        background-color 0.18s ease-out,
+        color 0.18s ease-out,
+        border-color 0.18s ease-out,
+        transform 0.18s ease-out,
+        box-shadow 0.18s ease-out;
+    }
+
+    .btn-dark {
+      background-color: var(--exp-black);
+      border-color: var(--exp-black);
+      color: #ffffff;
+    }
+
+    .btn-dark:hover {
+      background-color: #222222;
+      border-color: #222222;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    .btn-outline-dark {
+      background-color: transparent;
+      border-color: #4b5563;
+      color: #e5e7eb;
+    }
+
+    .btn-outline-dark:hover {
+      background-color: #000000;
+      border-color: #000000;
+      color: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.8);
+    }
+
+    .auth-footer-text {
+      color: #9ca3af;
+      font-size: 0.85rem;
+    }
+
+    .auth-footer-link {
+      color: #ffffff;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 1px;
+      transition: border-color 0.18s ease-out, color 0.18s ease-out;
+    }
+
+    .auth-footer-link:hover {
+      color: #ffffff;
+      border-color: #ffffff;
+    }
+
+    .alert {
+      border-radius: 999px;
+      padding: 0.55rem 0.9rem;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 576px) {
+      .auth-card {
+        padding: 1.8rem 1.4rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div class="auth-container">
+    <div class="auth-brand">
+      <div class="auth-brand-subtitle">Expense Manager</div>
+      <div class="auth-brand-title">CONTROL YOUR MONEY</div>
+    </div>
+
     {% block content %}{% endblock %}
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

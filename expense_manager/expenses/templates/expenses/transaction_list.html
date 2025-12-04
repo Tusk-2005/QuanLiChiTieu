@@ -1,34 +1,127 @@
 {% extends "expenses/base.html" %}
 {% block content %}
-<h2 class="mb-4">📒 Danh sách giao dịch</h2>
+<style>
+  .exp-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .exp-list-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .exp-transaction-card {
+    border-radius: 18px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+    transition:
+      transform 0.18s ease-out,
+      box-shadow 0.18s ease-out,
+      border-color 0.18s ease-out,
+      background-color 0.18s ease-out;
+  }
+
+  .exp-transaction-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 52px rgba(0, 0, 0, 0.14);
+    border-color: #000000;
+    background-color: #fafafa;
+  }
+
+  .exp-amount {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  .btn-dark,
+  .btn-outline-dark {
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.45rem 1.1rem;
+    transition:
+      background-color 0.18s ease-out,
+      color 0.18s ease-out,
+      border-color 0.18s ease-out,
+      transform 0.18s ease-out,
+      box-shadow 0.18s ease-out;
+  }
+
+  .btn-dark {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+  }
+
+  .btn-dark:hover {
+    background-color: #222222;
+    border-color: #222222;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  }
+
+  .btn-outline-dark {
+    background-color: transparent;
+    border-color: #4b5563;
+    color: #111827;
+  }
+
+  .btn-outline-dark:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  }
+</style>
+
+<div class="exp-list-header">
+  <h2 class="exp-list-title">📒 Danh sách giao dịch</h2>
+  <a href="{% url 'transaction_create' %}" class="btn btn-dark">
+    ➕ Thêm giao dịch
+  </a>
+</div>
 
 <div class="row">
   {% for t in transactions %}
-  <div class="col-md-4 mb-3">
-    <div class="card p-3 {% if t.type == 'income' %}border-success{% else %}border-danger{% endif %}">
-      
+  <div class="col-md-4 mb-4">
+    <div class="exp-transaction-card card p-3 {% if t.type == 'income' %}border-success{% else %}border-danger{% endif %}">
       <!-- Header -->
-      <div class="d-flex justify-content-between align-items-center">
-        <h5 class="{% if t.type == 'income' %}text-success{% else %}text-danger{% endif %}">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0 {% if t.type == 'income' %}text-success{% else %}text-danger{% endif %}">
           {{ t.get_type_display }}
         </h5>
-        <span class="fw-bold">{{ t.amount }} ₫</span>
+        <span class="exp-amount">{{ t.amount }} ₫</span>
       </div>
 
       <!-- Body -->
-      <p class="mb-1"><b>Danh mục:</b> {{ t.category|default:"Không có" }}</p>
-      <p class="mb-1"><b>Ngày:</b> {{ t.date }}</p>
-      <p class="text-muted">{{ t.note }}</p>
+      <p class="mb-1">
+        <b>Danh mục:</b> {{ t.category|default:"Không có" }}
+      </p>
+      <p class="mb-1">
+        <b>Ngày:</b> {{ t.date }}
+      </p>
+      <p class="text-muted mb-2">
+        {{ t.note }}
+      </p>
 
       <!-- Footer (Edit + Delete) -->
       <div class="d-flex justify-content-end gap-2 mt-2">
-        <a href="{% url 'transaction_edit' t.id %}" class="btn btn-sm btn-outline-primary">
+        <a href="{% url 'transaction_edit' t.id %}" class="btn btn-sm btn-outline-dark">
           ✏️ Sửa
         </a>
-        <form method="post" action="{% url 'transaction_delete' t.id %}" 
+        <form method="post"
+              action="{% url 'transaction_delete' t.id %}"
               onsubmit="return confirm('Bạn có chắc chắn muốn xoá giao dịch này?');">
           {% csrf_token %}
-          <button type="submit" class="btn btn-sm btn-outline-danger">🗑 Xoá</button>
+          <button type="submit" class="btn btn-sm btn-outline-danger">
+            🗑 Xoá
+          </button>
         </form>
       </div>
 
@@ -38,7 +131,4 @@
   <p class="text-muted">Chưa có giao dịch nào.</p>
   {% endfor %}
 </div>
-
-<!-- Add new -->
-<a href="{% url 'transaction_create' %}" class="btn btn-primary mt-3">➕ Thêm giao dịch</a>
 {% endblock %}

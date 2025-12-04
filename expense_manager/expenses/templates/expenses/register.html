@@ -1,41 +1,65 @@
 {% extends "expenses/base_auth.html" %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-6 col-lg-5">
-    <div class="card shadow p-4 border-0 rounded-3">
-      <h3 class="text-center mb-4">📝 Đăng ký</h3>
-      <form method="post">
-        {% csrf_token %}
+<div class="auth-card">
+  <h3 class="text-center mb-4"> Đăng ký</h3>
 
-        <div class="mb-3">
-          <label for="id_username" class="form-label">Tên đăng nhập</label>
-          <input type="text" name="username" id="id_username" class="form-control" required>
-        </div>
+  <form method="post">
+    {% csrf_token %}
 
-        <div class="mb-3">
-          <label for="id_email" class="form-label">Email</label>
-          <input type="email" name="email" id="id_email" class="form-control">
-        </div>
-
-        <div class="mb-3">
-          <label for="id_password1" class="form-label">Mật khẩu</label>
-          <input type="password" name="password1" id="id_password1" class="form-control" required>
-        </div>
-
-        <div class="mb-3">
-          <label for="id_password2" class="form-label">Xác nhận mật khẩu</label>
-          <input type="password" name="password2" id="id_password2" class="form-control" required>
-        </div>
-
-        <button type="submit" class="btn btn-success w-100">Tạo tài khoản</button>
-      </form>
-
-      <div class="text-center mt-3">
-        <small>Đã có tài khoản?
-          <a href="{% url 'login' %}">Đăng nhập</a>
-        </small>
-      </div>
+    <div class="mb-3">
+      <label for="id_username" class="form-label">Tên đăng nhập</label>
+      <input
+        type="text"
+        name="username"
+        id="id_username"
+        class="form-control"
+        placeholder="vd: nguyenvana"
+        required>
     </div>
+
+    <div class="mb-3">
+      <label for="id_email" class="form-label">Email</label>
+      <input
+        type="email"
+        name="email"
+        id="id_email"
+        class="form-control"
+        placeholder="you@example.com"
+        required>
+    </div>
+
+    <div class="mb-3">
+      <label for="id_password1" class="form-label">Mật khẩu</label>
+      <input
+        type="password"
+        name="password1"
+        id="id_password1"
+        class="form-control"
+        placeholder="tối thiểu 8 ký tự"
+        required>
+    </div>
+
+    <div class="mb-4">
+      <label for="id_password2" class="form-label">Xác nhận mật khẩu</label>
+      <input
+        type="password"
+        name="password2"
+        id="id_password2"
+        class="form-control"
+        placeholder="nhập lại mật khẩu"
+        required>
+    </div>
+
+    <button type="submit" class="btn btn-dark w-100">
+      Tạo tài khoản
+    </button>
+  </form>
+
+  <div class="text-center mt-3">
+    <span class="auth-footer-text">Đã có tài khoản?</span>
+    <a href="{% url 'login' %}" class="auth-footer-link ms-1">
+      Đăng nhập
+    </a>
   </div>
 </div>
 {% endblock %}

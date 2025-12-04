@@ -1,41 +1,154 @@
 {% extends "expenses/base.html" %}
 {% block content %}
-<h2>📊 Thống kê chi tiêu</h2>
+<style>
+  .exp-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 1.5rem;
+  }
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card p-3">
-      <h5>Biểu đồ tròn</h5>
-      <canvas id="pieChart"></canvas>
+  .exp-section-title {
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+
+  .exp-section-subtitle {
+    font-size: 0.9rem;
+    color: #6c757d;
+  }
+
+  .exp-card {
+    border-radius: 18px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+    transition:
+      transform 0.18s ease-out,
+      box-shadow 0.18s ease-out,
+      border-color 0.18s ease-out;
+    background-color: #ffffff;
+  }
+
+  .exp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14);
+    border-color: #000000;
+  }
+
+  .btn-dark,
+  .btn-outline-dark {
+    border-radius: 999px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.6rem 1.4rem;
+    transition:
+      background-color 0.18s ease-out,
+      color 0.18s ease-out,
+      border-color 0.18s ease-out,
+      transform 0.18s ease-out,
+      box-shadow 0.18s ease-out;
+  }
+
+  .btn-dark {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+  }
+
+  .btn-dark:hover {
+    background-color: #222222;
+    border-color: #222222;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  }
+
+  .btn-outline-dark {
+    background-color: transparent;
+    border-color: #4b5563;
+    color: #111827;
+  }
+
+  .btn-outline-dark:hover {
+    background-color: #000000;
+    border-color: #000000;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+  }
+</style>
+
+<div class="container-fluid">
+  <div class="exp-section-header">
+    <div>
+      <h2 class="exp-section-title">📊 Thống kê chi tiêu</h2>
+      <p class="exp-section-subtitle">
+        Tổng quan chi tiêu theo danh mục và thời gian.
+      </p>
+    </div>
+    <div>
+      <a href="{% url 'budget_form' %}" class="btn btn-outline-dark btn-sm">
+        💡 Đặt ngân sách
+      </a>
     </div>
   </div>
-  <div class="col-md-6">
-    <div class="card p-3">
-      <h5>Biểu đồ cột</h5>
-      <canvas id="barChart"></canvas>
+
+  <div class="row g-4">
+    <div class="col-md-6">
+      <div class="exp-card p-3 h-100">
+        <h5 class="mb-2">Cơ cấu chi tiêu theo danh mục</h5>
+        <small class="text-muted">Biểu đồ tròn</small>
+        <div class="mt-3">
+          <canvas id="pieChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="exp-card p-3 h-100">
+        <h5 class="mb-2">Chi tiêu theo danh mục</h5>
+        <small class="text-muted">Biểu đồ cột</small>
+        <div class="mt-3">
+          <canvas id="barChart"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-  // Truyền dữ liệu từ Django sang JS (chuyển thành JSON hợp lệ)
   const chartLabels = JSON.parse('{{ labels|safe|escapejs }}');
   const chartData = JSON.parse('{{ data|safe|escapejs }}');
 
-  // Biểu đồ tròn
   new Chart(document.getElementById("pieChart"), {
     type: "pie",
     data: {
       labels: chartLabels,
       datasets: [{
         data: chartData,
-        backgroundColor: ["#f44336", "#2196f3", "#4caf50", "#ff9800", "#9c27b0"]
+        backgroundColor: [
+          "#000000",
+          "#1f2933",
+          "#4b5563",
+          "#9ca3af",
+          "#111827",
+          "#6b7280"
+        ],
+        borderWidth: 1,
+        borderColor: "#ffffff"
       }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          position: "bottom"
+        }
+      }
     }
   });
 
-  // Biểu đồ cột
   new Chart(document.getElementById("barChart"), {
     type: "bar",
     data: {
@@ -43,11 +156,18 @@
       datasets: [{
         label: "Chi tiêu",
         data: chartData,
-        backgroundColor: "#2196f3"
+        backgroundColor: "#000000"
       }]
     },
     options: {
-      scales: { y: { beginAtZero: true } }
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      }
     }
   });
 </script>
