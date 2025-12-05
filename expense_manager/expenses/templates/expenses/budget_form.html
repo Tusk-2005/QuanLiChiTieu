@@ -1,94 +1,115 @@
 {% extends "expenses/base.html" %}
 {% block content %}
 <style>
-  .btn-dark,
-  .btn-outline-dark {
-    border-radius: 999px;
+  .exp-budget-form-card {
+    max-width: 720px;
+  }
+
+  .exp-budget-table-wrapper {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--exp-border);
+    background-color: var(--exp-bg-soft);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(255, 255, 255, 0.01);
+  }
+
+  .exp-budget-table {
+    margin-bottom: 0;
+  }
+
+  .exp-budget-table thead th {
+    background-color: #020617;
+    color: var(--exp-text-muted);
     text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.55rem 1.3rem;
-    transition:
-      background-color 0.18s ease-out,
-      color 0.18s ease-out,
-      border-color 0.18s ease-out,
-      transform 0.18s ease-out,
-      box-shadow 0.18s ease-out;
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    border-bottom-color: var(--exp-border);
+    border-top: none;
   }
-  .btn-dark {
-    background-color: #000000;
-    border-color: #000000;
-    color: #ffffff;
+
+  .exp-budget-table tbody tr {
+    background-color: #020617;
+    border-color: var(--exp-border);
   }
-  .btn-dark:hover {
-    background-color: #222222;
-    border-color: #222222;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+
+  .exp-budget-table tbody tr:nth-child(even) {
+    background-color: #0b1120;
   }
-  .btn-outline-dark {
-    background-color: transparent;
-    border-color: #4b5563;
-    color: #111827;
+
+  .exp-budget-table td {
+    border-color: var(--exp-border);
+    font-size: 0.9rem;
   }
-  .btn-outline-dark:hover {
-    background-color: #000000;
-    border-color: #000000;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
-  }
-  .exp-budget-table th {
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    letter-spacing: 0.12em;
+
+  .exp-budget-empty {
+    text-align: center;
+    padding: 0.9rem 0;
+    color: var(--exp-text-muted);
   }
 </style>
 
-<h2 class="mb-4"> Đặt ngân sách</h2>
-<form method="post" class="mb-4">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit" class="btn btn-dark"> Lưu</button>
-  <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">↩ Quay lại</a>
-</form>
+<div class="row g-4">
+  <!-- Form đặt ngân sách -->
+  <div class="col-lg-6">
+    <div class="card p-4 exp-budget-form-card">
+      <h2 class="mb-4">Đặt ngân sách</h2>
 
-<h3 class="mt-5 mb-3"> Hạn mức hiện tại</h3>
-<table class="table table-bordered align-middle exp-budget-table">
-  <thead>
-    <tr>
-      <th>Danh mục</th>
-      <th>Ngân sách</th>
-      <th>Đã chi</th>
-      <th>Còn lại</th>
-      <th>Hành động</th>
-    </tr>
-  </thead>
-  <tbody>
-    {% for b in budgets %}
-    <tr>
-      <td>{{ b.category }}</td>
-      <td>{{ b.limit }} ₫</td>
-      <td>{{ b.spent }} ₫</td>
-      <td>{{ b.remaining }} ₫</td>
-      <td>
-        <form method="post"
-              action="{% url 'budget_delete' b.id %}"
-              style="display:inline"
-              onsubmit="return confirm('Xoá ngân sách này?');">
-          {% csrf_token %}
-          <button type="submit" class="btn btn-danger btn-sm">
-            🗑 Xóa
-          </button>
-        </form>
-      </td>
-    </tr>
-    {% empty %}
-    <tr>
-      <td colspan="5" class="text-center">Chưa có ngân sách nào</td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+      <form method="post" class="mb-2">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <div class="mt-3 d-flex gap-2">
+          <button type="submit" class="btn btn-dark">Lưu</button>
+          <a href="{% url 'dashboard' %}" class="btn btn-outline-dark">↩ Quay lại</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Bảng hạn mức -->
+  <div class="col-12">
+    <h3 class="mt-4 mb-3">Hạn mức hiện tại</h3>
+
+    <div class="exp-budget-table-wrapper">
+      <table class="table exp-budget-table align-middle">
+        <thead>
+          <tr>
+            <th>Danh mục</th>
+            <th>Ngân sách</th>
+            <th>Đã chi</th>
+            <th>Còn lại</th>
+            <th class="text-center">Hành động</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in budgets %}
+          <tr>
+            <td>{{ b.category }}</td>
+            <td>{{ b.limit }} ₫</td>
+            <td>{{ b.spent }} ₫</td>
+            <td>{{ b.remaining }} ₫</td>
+            <td class="text-center">
+              <form method="post"
+                    action="{% url 'budget_delete' b.id %}"
+                    style="display:inline"
+                    onsubmit="return confirm('Xoá ngân sách này?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Xóa</button>
+              </form>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="exp-budget-empty">
+              Chưa có ngân sách nào
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 {% endblock %}

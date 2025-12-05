@@ -83,7 +83,7 @@
 <div class="exp-list-header">
   <h2 class="exp-list-title">📒 Danh sách giao dịch</h2>
   <a href="{% url 'transaction_create' %}" class="btn btn-dark">
-    ➕ Thêm giao dịch
+     Thêm giao dịch
   </a>
 </div>
 
@@ -113,14 +113,14 @@
       <!-- Footer (Edit + Delete) -->
       <div class="d-flex justify-content-end gap-2 mt-2">
         <a href="{% url 'transaction_edit' t.id %}" class="btn btn-sm btn-outline-dark">
-          ✏️ Sửa
+           Sửa
         </a>
         <form method="post"
               action="{% url 'transaction_delete' t.id %}"
               onsubmit="return confirm('Bạn có chắc chắn muốn xoá giao dịch này?');">
           {% csrf_token %}
           <button type="submit" class="btn btn-sm btn-outline-danger">
-            🗑 Xoá
+             Xoá
           </button>
         </form>
       </div>

@@ -42,13 +42,13 @@
 </style>
 
 <div class="card p-4 mb-3">
-  <h2 class="mb-3">➕ Thêm giao dịch</h2>
+  <h2 class="mb-3"> Thêm giao dịch</h2>
   <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
     <div class="mt-3 d-flex gap-2">
       <button type="submit" class="btn btn-dark">
-        💾 Lưu
+         Lưu
       </button>
       <a href="{% url 'transaction_list' %}" class="btn btn-outline-dark">
         ↩ Quay lại

@@ -15,88 +15,38 @@
 
   .exp-section-subtitle {
     font-size: 0.9rem;
-    color: #6c757d;
+    color: var(--exp-text-muted);
   }
 
   .exp-card {
     border-radius: 18px;
-    border: 1px solid #dee2e6;
-    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
-    transition:
-      transform 0.18s ease-out,
-      box-shadow 0.18s ease-out,
-      border-color 0.18s ease-out;
-    background-color: #ffffff;
-  }
-
-  .exp-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.14);
-    border-color: #000000;
-  }
-
-  .btn-dark,
-  .btn-outline-dark {
-    border-radius: 999px;
-    text-transform: uppercase;
-    letter-spacing: 0.12em;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.6rem 1.4rem;
-    transition:
-      background-color 0.18s ease-out,
-      color 0.18s ease-out,
-      border-color 0.18s ease-out,
-      transform 0.18s ease-out,
-      box-shadow 0.18s ease-out;
-  }
-
-  .btn-dark {
-    background-color: #000000;
-    border-color: #000000;
-    color: #ffffff;
-  }
-
-  .btn-dark:hover {
-    background-color: #222222;
-    border-color: #222222;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
-  }
-
-  .btn-outline-dark {
-    background-color: transparent;
-    border-color: #4b5563;
-    color: #111827;
-  }
-
-  .btn-outline-dark:hover {
-    background-color: #000000;
-    border-color: #000000;
-    color: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--exp-border);
+    background-color: var(--exp-bg-soft);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.9),
+      0 0 0 1px rgba(255, 255, 255, 0.01);
+    padding: 1.5rem;
   }
 </style>
 
 <div class="container-fluid">
   <div class="exp-section-header">
     <div>
-      <h2 class="exp-section-title">📊 Thống kê chi tiêu</h2>
+      <h2 class="exp-section-title">Thống kê chi tiêu</h2>
       <p class="exp-section-subtitle">
         Tổng quan chi tiêu theo danh mục và thời gian.
       </p>
     </div>
     <div>
-      <a href="{% url 'budget_form' %}" class="btn btn-outline-dark btn-sm">
-        💡 Đặt ngân sách
+      <a href="{% url 'budget_create' %}" class="btn btn-outline-dark btn-sm">
+        Đặt ngân sách
       </a>
     </div>
   </div>
 
   <div class="row g-4">
     <div class="col-md-6">
-      <div class="exp-card p-3 h-100">
+      <div class="exp-card h-100">
         <h5 class="mb-2">Cơ cấu chi tiêu theo danh mục</h5>
         <small class="text-muted">Biểu đồ tròn</small>
         <div class="mt-3">
@@ -106,7 +56,7 @@
     </div>
 
     <div class="col-md-6">
-      <div class="exp-card p-3 h-100">
+      <div class="exp-card h-100">
         <h5 class="mb-2">Chi tiêu theo danh mục</h5>
         <small class="text-muted">Biểu đồ cột</small>
         <div class="mt-3">
@@ -120,53 +70,81 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   const chartLabels = JSON.parse('{{ labels|safe|escapejs }}');
-  const chartData = JSON.parse('{{ data|safe|escapejs }}');
+  const chartData   = JSON.parse('{{ data|safe|escapejs }}');
 
-  new Chart(document.getElementById("pieChart"), {
+  const palette = [
+    "#f97316", 
+    "#22c55e", 
+    "#3b82f6", 
+    "#eab308", 
+    "#a855f7", 
+    "#ec4899", 
+    "#38bdf8", 
+    "#facc15" 
+  ];
+
+  const pieCtx = document.getElementById("pieChart").getContext("2d");
+  const barCtx = document.getElementById("barChart").getContext("2d");
+
+  new Chart(pieCtx, {
     type: "pie",
     data: {
       labels: chartLabels,
       datasets: [{
         data: chartData,
-        backgroundColor: [
-          "#000000",
-          "#1f2933",
-          "#4b5563",
-          "#9ca3af",
-          "#111827",
-          "#6b7280"
-        ],
-        borderWidth: 1,
-        borderColor: "#ffffff"
+        backgroundColor: chartLabels.map((_, i) => palette[i % palette.length]),
+        borderColor: "#020617",
+        borderWidth: 2
       }]
     },
     options: {
       plugins: {
         legend: {
-          position: "bottom"
+          position: "bottom",
+          labels: {
+            color: "#e5e7eb",
+            boxWidth: 14
+          }
         }
       }
     }
   });
 
-  new Chart(document.getElementById("barChart"), {
+  new Chart(barCtx, {
     type: "bar",
     data: {
       labels: chartLabels,
       datasets: [{
         label: "Chi tiêu",
         data: chartData,
-        backgroundColor: "#000000"
+        backgroundColor: chartLabels.map((_, i) => palette[i % palette.length]),
+        borderRadius: 6
       }]
     },
     options: {
       scales: {
+        x: {
+          ticks: {
+            color: "#e5e7eb"
+          },
+          grid: {
+            color: "rgba(148, 163, 184, 0.2)"
+          }
+        },
         y: {
-          beginAtZero: true
+          beginAtZero: true,
+          ticks: {
+            color: "#e5e7eb"
+          },
+          grid: {
+            color: "rgba(148, 163, 184, 0.2)"
+          }
         }
       },
       plugins: {
-        legend: { display: false }
+        legend: {
+          display: false
+        }
       }
     }
   });
